@@ -1,0 +1,8 @@
+{
+    "editor.formatOnSave": false,
+    "editor.formatOnType": false,
+    "editor.formatOnPaste": false,
+    "python-envs.defaultEnvManager": "ms-python.python:system",
+    "python.defaultInterpreterPath": "/usr/bin/python3.13",
+    "python.analysis.typeCheckingMode": "basic"
+}

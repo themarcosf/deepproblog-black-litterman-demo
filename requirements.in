@@ -1,0 +1,6 @@
+deepproblog
+langchain-core
+langchain-openai
+pydantic
+pyportfolioopt
+pyswip @ git+https://github.com/ML-KULeuven/pyswip.git

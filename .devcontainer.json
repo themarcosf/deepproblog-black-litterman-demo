@@ -1,0 +1,29 @@
+{
+    "name": "BL-view-sandbox",
+    "build": {
+        "context": ".",
+        "dockerfile": "docker/Dockerfile"
+    },
+    "features": {
+        "ghcr.io/devcontainers/features/node:2": {},
+        "ghcr.io/anthropics/devcontainer-features/claude-code:1": {}
+    },
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "anthropic.claude-code",
+                "esbenp.prettier-vscode",
+                "ms-python.python",
+                "rebornix.prolog"
+            ],
+            "settings": {
+                "python.defaultInterpreterPath": "/usr/bin/python3.13"
+            }
+        }
+    },
+    "onCreateCommand": "pip-compile requirements.in",
+    "postCreateCommand": "pip3 install -r requirements.txt",
+    "runArgs": [
+        "--rm"
+    ]
+}
