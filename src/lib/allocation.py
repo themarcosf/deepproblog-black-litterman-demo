@@ -78,6 +78,11 @@ def market_data(companies: list[str]) -> tuple[pd.DataFrame, pd.Series]:
 def build_base_allocation(companies: list[str]) -> dict[int, float]:
     logger.info("Building base allocation (no classifier views) for companies: %s", companies)
     cov, pi = market_data(companies)
+    logger.info(
+        "Base Black-Litterman prior expected returns (market-implied equilibrium "
+        "returns, before applying any investor views): %s",
+        round_floats(pi.to_dict(), ndigits=5),
+    )
 
     ef = EfficientFrontier(pi, cov)
     ef.max_sharpe()
@@ -118,7 +123,7 @@ def build_allocation(result) -> dict[int, float]:
         omega="idzorek",
         view_confidences=view_confidences,
     )
-    logger.info("Black-Litterman posterior returns: %s", round_floats(bl.bl_returns().to_dict()))
+    logger.info("Black-Litterman posterior returns: %s", round_floats(bl.bl_returns().to_dict(), ndigits=5))
     logger.info(
         "Black-Litterman posterior returns blend the market-implied prior returns "
         "(derived from market-cap weights and the covariance matrix) with the "
