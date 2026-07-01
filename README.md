@@ -8,7 +8,7 @@ A toy example accompanying a scientific paper on neuro-symbolic reasoning for po
 
 ## Overview
 
-Classical deep learning approaches to financial classification operate as black boxes: they learn from data alone, can memorize spurious correlations, and offer no mechanism to enforce domain constraints. Probabilistic Logic Programming (PLP) addresses these limitations by combining symbolic reasoning with learned or predicted probabilities.
+Classical deep learning approaches to financial classification operate as black boxes: they learn from data alone, can memorize spurious correlations, and offer no mechanism to enforce domain constraints. DeepProbLog addresses these limitations by combining symbolic reasoning with learned or predicted probabilities.
 
 This example demonstrates the following pipeline:
 
@@ -21,7 +21,7 @@ Financial profile (structured scores)
         │
         ▼
   DeepProbLog inference (ExactEngine)
-  → market_stance/2 probability per (company, stance) pair
+  → market_stance probability per (company, stance) pair
         │
         ▼
   Black-Litterman model (PyPortfolioOpt)
@@ -33,19 +33,31 @@ The neural predicate is declared in Prolog as:
 ```prolog
 nn(classifier, [Company], Stance, [bullish, bearish, neutral]) ::
     market_stance(Company, Stance).
+
+bullish_company(Company) :-
+    market_stance(Company, bullish).
+
+bearish_company(Company) :-
+    market_stance(Company, bearish).
+
+neutral_company(Company) :-
+    market_stance(Company, neutral).
 ```
 
-DeepProbLog calls the LLM classifier whenever the logic engine needs to evaluate `market_stance/2`, binding the output probabilities to the symbolic proof tree. This allows logical rules (e.g., `bullish_company/1`) to compose over uncertain, LLM-derived facts in a principled probabilistic framework.
+DeepProbLog calls the LLM classifier whenever the logic engine needs to evaluate `market_stance`, binding the output probabilities to the symbolic proof tree. This allows logical rules (e.g., `bullish_company`) to compose over uncertain, LLM-derived facts in a principled probabilistic framework.
 
 ---
 
 ## Prerequisites
 
+This project is intended to be run inside the provided Development Container (Dev Container). The container automatically installs and configures all required dependencies, including Python, SWI-Prolog, and the Python packages used by the example.
+
 | Requirement | Notes |
 |---|---|
-| Python ≥ 3.11 | Tested on 3.11 |
-| SWI-Prolog | Required by `pyswip` |
+| Dev Containers support | Available in VS Code, GitHub Codespaces, and compatible environments |
 | `OPENAI_API_KEY` | **Must be set in the environment before running** |
+
+No manual installation steps are required once the Dev Container has been created.
 
 ### Setting the API key
 
@@ -59,17 +71,16 @@ The application will refuse to start if the key is absent.
 
 ## Installation
 
-```bash
-pip install -r requirements.txt
-```
-
-Dependencies (see `requirements.in`):
+Opening the repository in the Dev Container automatically provisions:
 
 - `deepproblog` — neuro-symbolic inference engine
 - `langchain-core` / `langchain-openai` — LLM integration
 - `pydantic` — structured output validation
 - `pyportfolioopt` — Black-Litterman portfolio construction
 - `pyswip` — Python bindings for SWI-Prolog
+- Python 3.13 and SWI-Prolog runtime dependencies
+
+No additional pip install commands are necessary.
 
 ---
 
